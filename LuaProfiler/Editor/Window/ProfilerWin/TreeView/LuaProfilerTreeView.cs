@@ -857,6 +857,41 @@ namespace MikuLuaProfiler
             LoadHistoryCurve();
         }
 
+        /// <summary>
+        /// 导出性能数据到CSV文件，包含详细的堆栈信息
+        /// </summary>
+        public void ExportToCSV()
+        {
+            string path = EditorUtility.SaveFilePanel(
+                "Export Profiler Data to CSV",
+                "",
+                DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + "_profiler",
+                "csv");
+
+            if (string.IsNullOrEmpty(path))
+            {
+                return; // 用户取消了操作
+            }
+
+            try
+            {
+                LuaCsvExporter.ExportToCSV(path, roots);
+                EditorUtility.DisplayDialog(
+                    "Export Success",
+                    string.Format("Profiler data exported successfully to:\n{0}\n\nTotal items: {1}", path, roots.Count),
+                    "OK");
+                Debug.Log(string.Format("<color=#00ff00>CSV Export Success:</color> {0}", path));
+            }
+            catch (Exception ex)
+            {
+                EditorUtility.DisplayDialog(
+                    "Export Failed",
+                    string.Format("Failed to export CSV file:\n{0}", ex.Message),
+                    "OK");
+                Debug.LogError(string.Format("CSV Export Error: {0}\n{1}", ex.Message, ex.StackTrace));
+            }
+        }
+
         const long MaxB = 1024;
         const long MaxK = MaxB * 1024;
         const long MaxM = MaxK * 1024;

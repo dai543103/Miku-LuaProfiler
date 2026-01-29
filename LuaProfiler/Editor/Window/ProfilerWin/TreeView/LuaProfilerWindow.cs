@@ -452,6 +452,13 @@ namespace MikuLuaProfiler
                 {
                     m_TreeView.LoadHistory();
                 }
+
+                GUILayout.Space(5);
+                bool isExportCsv = GUILayout.Button("Export CSV", EditorStyles.toolbarButton, GUILayout.Height(30), GUILayout.Width(80));
+                if (isExportCsv)
+                {
+                    m_TreeView.ExportToCSV();
+                }
             }
             
             #endregion
